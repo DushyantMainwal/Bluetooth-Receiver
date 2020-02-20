@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">BluetoothSharing</string>
+
+    <string name="open_bt">Open bluetooth</string>
+    <string name="search">Search</string>
+    <string name="send_msg">Send Msg</string>
+    <string name="connect_error">error</string>
+    <string name="connect_success">Success</string>
+    <string name="connecting">Connecting....</string>
+    <string name="connect_state">Connect State</string>
+    <string name="send_msgs">Send Msgs：</string>
+    <string name="send_msg_error">Msg error：</string>
+    <string name="get_msg">Get Msg：</string>
+</resources>
