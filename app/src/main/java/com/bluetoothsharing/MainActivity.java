@@ -1,6 +1,5 @@
 package com.bluetoothsharing;
 
-import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothServerSocket;
@@ -9,8 +8,13 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,12 +29,14 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
+    public static final String btNameConnection = "Blade_Bluetooth";
     private static final String NAME = "BT_DEMO";
     private static final UUID BT_UUID = UUID.fromString("02001101-0001-1000-8080-00805F9BA9BA");
     private final int BUFFER_SIZE = 1024;
     List<BluetoothDevice> bluetoothDevices = new ArrayList<>();
     private BluetoothAdapter bTAdatper;
     private ConnectThread connectThread;
+    private ListenerThread listenerThread;
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -87,9 +93,10 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     };
-    private ListenerThread listenerThread;
     private TextView tvRecv;
-    public static final String btNameConnection = "Blade_Bluetooth";
+    private ImageView imageView;
+    private int previewFormat = -1;
+    private int width = -1, height = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
         openBlueTooth();
         tvRecv = findViewById(R.id.tv_recv);
 
+        imageView = findViewById(R.id.image_view);
 
         BluetoothAdapter bluetoothAdapter = null;
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -198,15 +206,25 @@ public class MainActivity extends AppCompatActivity {
                     if (bytes > 0) {
                         final byte[] data = new byte[bytes];
                         System.arraycopy(buffer, 0, data, 0, bytes);
-                        tvRecv.post(new Runnable() {
-                            @SuppressLint("SetTextI18n")
+//                        tvRecv.post(new Runnable() {
+//                            @SuppressLint("SetTextI18n")
+//                            @Override
+//                            public void run() {
+//                                tvRecv.setText(new String(data));
+//                                Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+
+//                            }
+//                        });
+
+                        final Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
                             @Override
                             public void run() {
-                                tvRecv.setText(new String(data));
+                                imageView.setImageBitmap(bitmap);
                             }
                         });
                         //Toast.makeText(MainActivity.this,  getResources().getString(R.string.get_msg)+new String(data), Toast.LENGTH_SHORT).show();
-                        System.out.println("ConnectThread: " + getResources().getString(R.string.get_msg) + new String(data));
+//                        System.out.println("ConnectThread: " + getResources().getString(R.string.get_msg) + new String(data));
                     }
                 }
             } catch (IOException e) {

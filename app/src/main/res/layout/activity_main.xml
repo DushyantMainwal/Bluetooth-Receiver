@@ -6,8 +6,17 @@
     android:layout_height="match_parent"
     android:layout_gravity="center"
     android:gravity="center"
+    android:orientation="vertical"
     android:background="@android:color/black"
     tools:context=".MainActivity">
+
+    <ImageView
+        android:id="@+id/image_view"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/ic_launcher"/>
 
     <TextView
         android:id="@+id/tv_recv"
@@ -15,6 +24,7 @@
         android:layout_height="wrap_content"
         android:textSize="50sp"
         android:textColor="@android:color/white"
-        android:text="0" />
+        android:text="0"
+        android:layout_marginTop="8dp"/>
 
 </LinearLayout>
